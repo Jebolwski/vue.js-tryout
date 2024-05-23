@@ -1,5 +1,7 @@
 <template>
-  <p>messi : {{ ad }}</p>
+  <div class="bg-red-400 p-4">
+    <p class="text-center text-lg font-semibold">Time ToDo</p>
+  </div>
 </template>
 
 <script setup>

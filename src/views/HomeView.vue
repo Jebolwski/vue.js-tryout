@@ -1,23 +1,18 @@
 <template>
   <main>
-    <p class="text-red-500">ronaldo {{ count }}</p>
-    <p @click="increment" class="cursor-pointer">arttır</p>
-    <p @click="decrement" class="cursor-pointer">azalt</p>
-    <form @submit.prevent="handleSubmit">
+    <form @submit.prevent="addTask">
       <div class="flex items-center gap-2">
-        <div>
+        <div class="p-2">
+          <p>title</p>
           <input
-            type="text"
             placeholder="enter title"
             v-model="title"
-            name="title"
             class="border border-black focus:outline-none"
           />
           <br />
+          <p class="mt-3">description</p>
           <input
-            type="text"
             placeholder="enter description"
-            name="description"
             v-model="description"
             class="border border-black focus:outline-none"
           />
@@ -25,70 +20,74 @@
         <button class="bg-red-600 rounded-md p-1 text-white">add task</button>
       </div>
     </form>
-    <div v-if="store" v-for="task in $store.getters.getTasks">
-      <div class="bg-purple-200 font-semibold text-black my-2">
+    <div v-if="store" v-for="task in $store.getters.getTasks" class="p-2">
+      <div
+        class="bg-gray-200 font-semibold text-black my-2 relative p-2 rounded-lg"
+      >
+        <p>
+          {{ task.id }}
+        </p>
         <p>
           {{ task.title }}
         </p>
         <p class="mt-1">
           {{ task.description }}
         </p>
-        <p class="mt-1">
+        <p class="mt-1" @click="finishTask(task.id)">
           {{ task.finished }}
+        </p>
+        <p
+          class="absolute right-4 top-0 text-xl text-red-500"
+          @click="deleteTask(task.id)"
+        >
+          x
         </p>
       </div>
     </div>
   </main>
 </template>
 
-<script>
+<script setup>
 import { ref } from "vue";
 import { useStore } from "vuex";
-export default {
-  setup() {
-    const count = ref(0);
-    const title = ref("");
-    const description = ref("");
-    const store = useStore();
-    function increment() {
-      count.value++;
-    }
+const count = ref(0);
+const title = ref("");
+const description = ref("");
+const store = useStore();
+function increment() {
+  count.value++;
+}
 
-    function decrement() {
-      count.value--;
-    }
-    const handleSubmit = () => {
-      console.log(title.value, description.value);
-    };
+function decrement() {
+  count.value--;
+}
+const handleSubmit = () => {
+  console.log(title.value, description.value);
+};
 
-    const addTask = () => {
-      if (
-        title != null &&
-        title != "" &&
-        description != null &&
-        description != ""
-      ) {
-        console.log(title.value, description.value);
-        store.dispatch("addTask", {
-          title: "Ödev Yap",
-          description: "o, aliquet",
-          finished: false,
-        });
-      } else {
-        console.log(title.value, description.value);
-        console.log("hata!!");
-      }
-      console.log(title.value, description.value);
-    };
+const addTask = () => {
+  if (
+    title != null &&
+    title != "" &&
+    description != null &&
+    description != ""
+  ) {
+    store.dispatch("addTask", {
+      id: store.getters.getTasks.length,
+      title: title,
+      description: description,
+      finished: false,
+    });
+  } else {
+    console.log(title.value, description.value);
+    console.log("hata!!");
+  }
+};
 
-    return {
-      count,
-      increment,
-      store,
-      decrement,
-      handleSubmit,
-      addTask,
-    };
-  },
+const deleteTask = (task_id) => {
+  store.dispatch("deleteTask", task_id);
+};
+const finishTask = (task_id) => {
+  store.dispatch("finishTask", task_id);
 };
 </script>

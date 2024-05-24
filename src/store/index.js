@@ -19,13 +19,6 @@ const store = createStore({
             "o, aliquet justo arcu vitae blandit facilisis orci. Quam pretium hac vel suscipitis sollicitutur molestie mattis habitasse posuere ",
           finished: true,
         },
-        {
-          id: 2,
-          title: "Yüksek tempo koşu",
-          description:
-            "o, aliquet justo arcu vitae blandit facilisis orci. Quam pretium hac vel suscipitis sollicitutur molestie mattis habitasse posuere ",
-          finished: true,
-        },
       ],
     };
   },
@@ -39,7 +32,11 @@ const store = createStore({
       });
     },
     finishTask(state, task_id) {
-      state.tasks[task_id].finished = !state.tasks[task_id].finished;
+      state.tasks.filter((task) => {
+        task.id == task_id;
+      })[0].finished = !state.tasks.filter((task) => {
+        task.id == task_id;
+      })[0].finished;
     },
   },
 

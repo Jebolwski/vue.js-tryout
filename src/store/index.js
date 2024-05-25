@@ -24,7 +24,14 @@ const store = createStore({
   },
   mutations: {
     addTask(state, taskObject) {
-      state.tasks.push(taskObject);
+      let obje = {
+        id: taskObject.id,
+        title: taskObject.title.value,
+        description: taskObject.description.value,
+        finished: taskObject.finished,
+      };
+
+      state.tasks.push(obje);
     },
     deleteTask(state, task_id) {
       state.tasks = state.tasks.filter((task) => {

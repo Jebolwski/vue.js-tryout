@@ -24,11 +24,7 @@
           </button>
         </div>
       </form>
-      <div
-        v-if="store"
-        v-for="task in $store.getters.getTasks"
-        class="p-2 lg:w-2/3 w-5/6"
-      >
+      <div v-if="store" v-for="task in tasks" class="p-2 lg:w-2/3 w-5/6">
         <div
           class="bg-gray-200 font-semibold text-black my-2 relative p-2 rounded-lg w-full"
         >
@@ -57,12 +53,16 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { ref, computed } from "vue";
 import { useStore } from "vuex";
-const count = ref(0);
 const title = ref("");
 const description = ref("");
 const store = useStore();
+const title_input = ref(null);
+
+const tasks = computed(() => {
+  return store.getters.getTasks;
+});
 
 const addTask = () => {
   if (
@@ -72,13 +72,14 @@ const addTask = () => {
     description != ""
   ) {
     store.dispatch("addTask", {
-      id: store.getters.getTasks.length,
+      id: store.getters.getTasks[store.getters.getTasks.length - 1].id + 1,
       title: title,
       description: description,
       finished: false,
     });
+    title.value = "";
+    description.value = "";
   } else {
-    console.log(title.value, description.value);
     console.log("hata!!");
   }
 };
